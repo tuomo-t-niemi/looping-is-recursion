@@ -30,17 +30,64 @@
     (helper seq1 seq2)))
 
 (defn find-first-index [pred a-seq]
-  ":(")
+  (loop [skv a-seq
+         index 0]
+    (cond
+     (empty? skv)
+       nil
+     (pred (first skv))
+      index
+     :else
+      (recur (rest skv) (inc index)))))
 
 (defn avg [a-seq]
-  -1)
+  (loop [sum 0
+         n 0
+         skv a-seq]
+    (if (empty? skv)
+      (if (= n 0)
+        sum
+        (/ sum n))
+      (recur (+ (first skv) sum) (inc n) (rest skv)))))
 
 (defn parity [a-seq]
-  ":(")
+  (loop [even-set #{}
+         odd-set #{}
+         skv a-seq]
+    (cond
+     (empty? skv)
+       odd-set
+     (contains? odd-set (first skv))
+       (recur (conj even-set (first skv)) (disj odd-set (first skv)) (rest skv))
+     (contains? even-set (first skv))
+       (recur (disj even-set (first skv)) (conj odd-set (first skv)) (rest skv))
+     :else
+       (recur even-set (conj odd-set (first skv)) (rest skv)))))
 
 (defn fast-fibo [n]
-  ":(")
+  (loop [iter 0
+         f-2 0
+         f-1 1]
+    (if (= iter n)
+      (cond
+       (= n 0)
+         0
+       (= n 1)
+         1
+       :else
+        f-2)
+      (recur (inc iter) f-1 (+ f-1 f-2)))))
+
 
 (defn cut-at-repetition [a-seq]
-  [":("])
+  (loop [skv a-seq
+         out-vector []
+         bag #{}]
+    (cond
+     (empty? skv)
+       out-vector
+     (contains? bag (first skv))
+       out-vector
+     :else
+       (recur (rest skv) (conj out-vector (first skv)) (conj bag (first skv))))))
 
